@@ -1,0 +1,28 @@
+# question 1, asking to return a list of numbers of just even integers 
+def evens_only(input_list):
+    return [int(num) for num in input_list if isinstance(num, (int,float)) and num % 2 == 0]
+
+# this is a simple algebra piecewise function
+def piecewise(x: float)-> float:
+    if x<0:
+        return -1.0
+    elif 0<= x < 2:
+        return 3 * x ** 2
+    else:
+        return float(-x)
+
+# this is a function that allows certain strings to rerun the letter and amount 
+def character_count(file_path):
+    letter_counts={}
+
+    with open(file_path,'r') as file:
+        content= file.read().lower()
+
+    for char in content:
+        if char.isalpha():
+            if char in letter_counts:
+                letter_counts[char] += 1
+            else:
+                letter_counts[char] = 1
+
+    return letter_counts 
