@@ -1,0 +1,78 @@
+import numpy as np
+
+class Course:
+    def __init__(self, course_number: int):
+        # Store course number and initialize roster
+        self.course_number = course_number
+        self.roster = []
+        
+    def get_course_number(self) -> int:
+        return self.course_number
+        
+    def add_student(self, student_name: str):
+        if student_name not in self.roster:
+            self.roster.append(student_name)
+        
+    def drop_student(self, student_name: str):
+        if student_name in self.roster:
+            self.roster.remove(student_name)
+       
+    def get_roster(self) -> list:
+        return sorted(self.roster)
+
+####################################################
+# Problem 2: Data filtering
+####################################################
+
+class DataFiltering:
+    def __init__(self):
+        self.data = np.genfromtxt("boston.csv", delimiter=',')
+
+    def get_percent_nan(self):
+        total_elements = self.data.size
+        nan_count = np.isnan(self.data).sum()
+        percent_nan = (nan_count / total_elements)  
+        return percent_nan
+        
+    def count_nan_per_column(self):
+        nan_per_column = np.isnan(self.data).sum(axis=0)
+        return nan_per_column 
+        
+    def average_columns_ignoring_nan_rows(self):
+        valid_rows = self.data[~np.isnan(self.data).any(axis=1)]
+        column_means = np.mean(valid_rows, axis=0)
+        return column_means
+
+####################################################
+# Problem 3: Data exploration
+####################################################
+
+class DataExploration:
+    def __init__(self):
+        self.data = np.genfromtxt("iris.csv", delimiter=',', skip_header=1, usecols=(0,1,2,3))  # Corrected to use skip_header
+
+    def sepal_measurements_for_biggest_petals(self):
+        # Extract necessary columns
+        sepal_length = self.data[:, 0]
+        sepal_width = self.data[:, 1]
+        petal_length = self.data[:, 2]
+        petal_width = self.data[:, 3]
+        
+        # Calculate petal area and get indices of the largest three areas
+        petal_area = (np.pi / 4) * petal_length * petal_width
+        largest_indices = np.argsort(petal_area)[-3:]
+        
+        # Retrieve sepal measurements for these indices
+        largest_sepal_measurements = np.column_stack((sepal_length[largest_indices], sepal_width[largest_indices]))
+        return largest_sepal_measurements 
+
+    def max_values_per_column_in_znorm(self):
+        # Calculate Z-normalized data matrix
+        mean = np.mean(self.data, axis=0)
+        std = np.std(self.data, axis=0)
+        z_normalized = (self.data - mean) / std
+        
+        # Get maximum values for each column
+        max_values = np.max(z_normalized, axis=0)
+        return max_values
+
